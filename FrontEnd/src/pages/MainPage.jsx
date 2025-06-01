@@ -1,47 +1,51 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 export default function MainPage() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const { user, setUser } = useUser();
 
-  return (
-    <div className="flex flex-col items-center justify-center h-screen gap-6">
-      <h1 className="text-3xl font-bold mb-4">🗺️ Welcome to 저기어때!</h1>
+    const handleLogout = () => {
+        setUser(null);         // 사용자 정보 초기화
+        navigate("/login");    // 로그인 페이지로 이동
+    };
 
-      <button
-        className="bg-blue-500 text-white px-6 py-2 rounded shadow"
-        onClick={() => navigate("/input")}
-      >
-        여행 정보 입력
-      </button>
-
-      <button
-        className="bg-green-500 text-white px-6 py-2 rounded shadow"
-        onClick={() => navigate("/theme")}
-      >
-        테마 선택
-      </button>
-
-      <button
-        className="bg-purple-500 text-white px-6 py-2 rounded shadow"
-        onClick={() => navigate("/saved")}
-      >
-        저장된 일정 보기
-      </button>
-
-      <button
-        className="bg-yellow-500 text-white px-6 py-2 rounded shadow"
-        onClick={() => navigate("/map")}
-      >
-        지도에서 보기
-      </button>
-
-      <button
-        className="bg-red-500 text-white px-6 py-2 rounded shadow"
-        onClick={() => navigate("/result")}
-      >
-        결과 보기
-      </button>
-    </div>
-  );
+    return (
+        <div className="min-h-screen bg-gradient-to-b from-sky-300 to-white flex flex-col items-center justify-center">
+            <div className="absolute top-4 right-6 flex items-center gap-4 text-lg font-semibold">
+                저기어때 – AI 여행 가이드
+                {user && (
+                    <>
+                        <span className="text-black">👤 {user.name}</span>
+                        <button
+                            onClick={handleLogout}
+                            className="text-sm bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200"
+                        >
+                            로그아웃
+                        </button>
+                    </>
+                )}
+            </div>
+            <h1 className="text-5xl font-bold mb-4 shadow-sm">
+                Welcome to <span className="text-black">저기어때!</span>
+            </h1>
+            <p className="mb-8 text-lg underline">
+                편리한 AI 일정생성으로 저기어때와 여행을 떠나보아요!
+            </p>
+            <div className="flex gap-6">
+                <button
+                    className="px-6 py-3 border border-sky-500 rounded-lg hover:bg-sky-100"
+                    onClick={() => navigate("/input")}
+                >
+                    일정 생성 하기
+                </button>
+                <button
+                    className="px-6 py-3 border border-sky-500 rounded-lg hover:bg-sky-100"
+                    onClick={() => navigate("/saved")}
+                >
+                    저장된 일정 불러오기
+                </button>
+            </div>
+        </div>
+    );
 }

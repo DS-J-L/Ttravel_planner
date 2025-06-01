@@ -1,22 +1,37 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import MainPage from "./pages/MainPage";
+import UserInputPage from "./pages/UserInputPage";
+import MapLoadingPage from "./pages/MapLoadingPage";
+import MapVisualizePage from "./pages/MapVisualizePage";
+import SavePage from "./pages/SavePage";
+import LoginPage from "./pages/LoginPage";
+import { UserProvider, useUser } from "./context/UserContext";
 
-import MainPage from './pages/MainPage';
-import InputPage from './pages/user_submit';      // 원래 파일명 기준
-import ThemePage from './pages/ThemePage';
-import SavedPlans from './pages/SavedPlans';
-import MapPage from './pages/MapPage';
-import ResultPage from './pages/ResultPage';
+function ProtectedRoute({ element }) {
+    const { user } = useUser();
+    return user ? element : <Navigate to="/login" replace />;
+}
+
+function AppRoutes() {
+    return (
+        <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<ProtectedRoute element={<MainPage />} />} />
+            <Route path="/input" element={<ProtectedRoute element={<UserInputPage />} />} />
+            <Route path="/loading" element={<ProtectedRoute element={<MapLoadingPage />} />} />
+            <Route path="/map_visualize" element={<ProtectedRoute element={<MapVisualizePage />} />} />
+            <Route path="/saved" element={<ProtectedRoute element={<SavePage />} />} />
+        </Routes>
+    );
+}
 
 export default function App() {
-  return (
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/input" element={<InputPage />} />
-        <Route path="/theme" element={<ThemePage />} />
-        <Route path="/saved" element={<SavedPlans />} />
-        <Route path="/map" element={<MapPage />} />
-        <Route path="/result" element={<ResultPage />} />
-      </Routes>
-  );
+    return (
+        <UserProvider>
+            <Router>
+                <AppRoutes />
+            </Router>
+        </UserProvider>
+    );
 }

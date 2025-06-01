@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function MapLoading() {
   const location = useLocation();
@@ -40,13 +40,14 @@ export default function MapLoading() {
         setStatus("Map ready! Redirecting...");
 
         setTimeout(() => {
-          navigate("/map/result", {
+          navigate("/map_visualize", {
             state: {
               userData: routeData.user_data,
               travelPlan: travelPlan,
             },
           });
         }, 1000);
+
       } catch (err) {
         console.error("Failed to fetch data:", err);
         alert("⚠️ Internal server error occurred. Please try again later.");
@@ -58,20 +59,15 @@ export default function MapLoading() {
   }, [userInput, navigate]);
 
   return (
-    <div style={{ padding: "2rem", textAlign: "center" }}>
-      <h2>🗺️ Generating Your Travel Map</h2>
-      <p>{status}</p>
+    <div className="min-h-screen bg-gradient-to-b from-sky-300 to-white flex flex-col items-center justify-center text-center px-4">
+      <h2 className="text-2xl font-bold mb-2">🗺️ Generating Your Travel Map</h2>
+      <p className="mb-6 text-lg">{status}</p>
 
-      <div style={{ background: '#eee', height: '20px', width: '100%', maxWidth: '500px', margin: '1rem auto', borderRadius: '10px' }}>
+      <div className="w-full max-w-md bg-gray-200 rounded-full h-5 overflow-hidden">
         <div
-          style={{
-            background: '#4caf50',
-            height: '100%',
-            width: `${progress}%`,
-            transition: 'width 0.5s ease-in-out',
-            borderRadius: '10px'
-          }}
-        />
+          className="bg-green-500 h-full transition-all duration-500"
+          style={{ width: `${progress}%` }}
+        ></div>
       </div>
     </div>
   );
