@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { UserData } from "../components/user_data";
+import styles from "./InputForm.module.css";
 
 export default function InputForm() {
   const navigate = useNavigate();
@@ -50,9 +51,9 @@ export default function InputForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-300 to-white flex items-center justify-center px-4">
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-xl p-8 w-full max-w-lg space-y-4">
-        <h2 className="text-2xl font-bold mb-4 text-center">여행 정보 입력</h2>
+    <div className={styles.container}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <h2 className={styles.title}>여행 정보 입력</h2>
 
         {[
           { label: "이름", name: "name", type: "text" },
@@ -67,33 +68,30 @@ export default function InputForm() {
           { label: "동행자", name: "companions", type: "text" },
           { label: "여행 컨셉", name: "concept", type: "text" },
         ].map(({ label, name, type }) => (
-          <div key={name}>
-            <label className="block font-medium mb-1">{label}</label>
+          <div key={name} className={styles.inputGroup}>
+            <label className={styles.label}>{label}</label>
             <input
               type={type}
               name={name}
               value={form[name]}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2"
+              className={styles.input}
               required
             />
           </div>
         ))}
 
-        <div>
-          <label className="block font-medium mb-1">추가 요청사항</label>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>추가 요청사항</label>
           <textarea
             name="extra_request"
             value={form.extra_request}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg p-2"
+            className={styles.textarea}
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mt-4"
-        >
+        <button type="submit" className={styles.submitButton}>
           다음
         </button>
       </form>

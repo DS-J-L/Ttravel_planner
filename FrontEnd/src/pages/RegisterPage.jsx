@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./RegisterPage.module.css";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
@@ -34,12 +35,9 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-sky-300 to-white flex items-center justify-center">
-            <form
-                onSubmit={handleSubmit}
-                className="bg-white p-6 rounded-xl shadow-md w-80 space-y-4"
-            >
-                <h2 className="text-2xl font-bold text-center">회원가입</h2>
+        <div className={styles.container}>
+            <form onSubmit={handleSubmit} className={styles.form}>
+                <h2 className={styles.title}>회원가입</h2>
 
                 <input
                     type="email"
@@ -48,7 +46,7 @@ const RegisterPage = () => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className={styles.input}
                 />
                 <input
                     type="password"
@@ -57,26 +55,18 @@ const RegisterPage = () => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className={styles.input}
                 />
 
-                <button
-                    type="submit"
-                    className="w-full bg-sky-500 text-white py-2 rounded-md hover:bg-sky-600"
-                >
+                <button type="submit" className={styles.submitButton}>
                     회원가입
                 </button>
 
-                {message && (
-                    <div className="text-red-500 text-sm text-center">{message}</div>
-                )}
+                {message && <div className={styles.message}>{message}</div>}
 
-                <div className="text-sm text-center">
-                    이미 계정이 있으신가요?{" "}
-                    <span
-                        className="text-blue-600 hover:underline cursor-pointer"
-                        onClick={() => navigate("/login")}
-                    >
+                <div className={styles.loginPrompt}>
+                    이미 계정이 있으신가요?{' '}
+                    <span className={styles.loginLink} onClick={() => navigate("/login")}>
                         로그인
                     </span>
                 </div>

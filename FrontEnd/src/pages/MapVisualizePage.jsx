@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import GoogleMapComponent from "../components/GoogleMapComponent";
-
+import styles from "./MapVisualize.module.css";
 
 export default function MapVisualize() {
   const { state } = useLocation();
@@ -19,7 +19,7 @@ export default function MapVisualize() {
 
   if (!travelPlan?.dayplan || travelPlan.dayplan.length === 0) {
     return (
-      <div className="p-8">
+      <div className={styles.errorContainer}>
         <h2>Error</h2>
         <p>No day plans found in the travel plan.</p>
         <button onClick={() => navigate(-1)}>Go Back</button>
@@ -30,7 +30,7 @@ export default function MapVisualize() {
   const getLatLngObj = (location) => ({
     lat: location?.latitude ?? 37.5665,
     lng: location?.longitude ?? 126.9780,
-});
+  });
 
   const getORSCoords = (list) =>
     list.map((v) => [v.location.longitude, v.location.latitude]);
@@ -66,16 +66,16 @@ export default function MapVisualize() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-300 to-white px-6 py-4">
-      <div className="text-lg font-semibold mb-4">저기어때 – AI 여행 가이드</div>
+    <div className={styles.pageContainer}>
+      <div className={styles.title}>저기어때 – AI 여행 가이드</div>
 
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="border border-sky-400 rounded-3xl p-4 h-96 overflow-y-auto">
-          <div className="mb-2 font-semibold">일정</div>
+      <div className={styles.gridContainer}>
+        <div className={styles.scheduleBox}>
+          <div className={styles.sectionTitle}>일정</div>
           <select
             onChange={(e) => setSelectedDayIndex(Number(e.target.value))}
             value={selectedDayIndex}
-            className="border rounded px-2 py-1 mb-2"
+            className={styles.daySelect}
           >
             {travelPlan.dayplan.map((day, i) => (
               <option key={i} value={i}>
@@ -86,51 +86,34 @@ export default function MapVisualize() {
           {loadingRoute && <p>Loading route...</p>}
         </div>
 
-        <div className="border border-sky-400 rounded-3xl p-4 h-96">
-        <div className="mb-2 font-semibold">지도</div>
+        <div className={styles.mapBox}>
+          <div className={styles.sectionTitle}>지도</div>
           {currentPlaces.length > 0 && (
             <GoogleMapComponent
-          places={currentPlaces}
-          routeGeoJson={routeGeoJson}
+              places={currentPlaces}
+              routeGeoJson={routeGeoJson}
             />
           )}
         </div>
-        </div>
+      </div>
 
-      <div className="mb-2 font-semibold">수정 사항</div>
+      <div className={styles.sectionTitle}>수정 사항</div>
       <textarea
-        className="w-full border border-sky-400 rounded-2xl p-3 mb-4"
+        className={styles.feedbackBox}
         rows={3}
         placeholder="수정사항을 입력해주세요."
         value={feedback}
         onChange={(e) => setFeedback(e.target.value)}
       />
 
-      <div className="flex justify-between">
-        <button
-          className="border border-sky-500 px-4 py-2 rounded hover:bg-sky-100"
-          onClick={() => navigate("/")}
-        >
-          메인메뉴로 돌아가기
-        </button>
-        <button
-          className="border border-sky-500 px-4 py-2 rounded hover:bg-sky-100"
-          onClick={handleSendEmail}
-          disabled={!email}
-        >
-          일정 저장하기
-        </button>
+      <div className={styles.buttonRow}>
+        <button className={styles.navButton} onClick={() => navigate("/")}>메인메뉴로 돌아가기</button>
+        <button className={styles.navButton} onClick={handleSendEmail} disabled={!email}>일정 저장하기</button>
       </div>
 
-      <div className="mt-4">
-        <h3 className="font-semibold mb-1">피드백 기반 재시도</h3>
-        <button
-          className="bg-yellow-500 text-white px-4 py-2 rounded disabled:opacity-50"
-          disabled={!feedback}
-          onClick={handleRetry}
-        >
-          Retry
-        </button>
+      <div className={styles.retrySection}>
+        <h3 className={styles.retryTitle}>피드백 기반 재시도</h3>
+        <button className={styles.retryButton} disabled={!feedback} onClick={handleRetry}>Retry</button>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./SavePage.module.css";
 
 export default function SavePage() {
   const navigate = useNavigate();
@@ -30,40 +31,34 @@ export default function SavePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-300 to-white px-6 py-4">
-      <div className="text-lg font-semibold mb-6">저기어때 – AI 여행 가이드</div>
+    <div className={styles.container}>
+      <div className={styles.header}>저기어때 – AI 여행 가이드</div>
+      <h2 className={styles.title}>〈저장된 일정 확인하기〉</h2>
 
-      <h2 className="text-center text-xl font-bold mb-6">〈저장된 일정 확인하기〉</h2>
-
-      <div className="flex flex-col items-center gap-4 mb-6">
+      <div className={styles.fileList}>
         {files.length > 0 ? (
           files.map((filename, idx) => (
             <button
               key={idx}
-              className={`border border-sky-500 px-6 py-2 rounded w-full max-w-xl text-center hover:bg-sky-100 ${
-                selected === filename ? "bg-sky-200" : ""
-              }`}
+              className={`${styles.fileButton} ${selected === filename ? styles.selected : ""}`}
               onClick={() => setSelected(filename)}
             >
               {idx + 1}. {filename.replace(".csv", "")}
             </button>
           ))
         ) : (
-          <p className="text-center text-gray-600">저장된 일정이 없습니다.</p>
+          <p className={styles.empty}>저장된 일정이 없습니다.</p>
         )}
       </div>
 
-      <div className="flex justify-between mt-6">
-        <button
-          onClick={() => navigate("/")}
-          className="border border-sky-500 px-4 py-2 rounded hover:bg-sky-100"
-        >
+      <div className={styles.buttonRow}>
+        <button onClick={() => navigate("/")} className={styles.navButton}>
           메인메뉴로 돌아가기
         </button>
         <button
           onClick={handleDownload}
           disabled={!selected}
-          className="border border-sky-500 px-4 py-2 rounded hover:bg-sky-100 disabled:opacity-50"
+          className={styles.downloadButton}
         >
           일정 다운로드하기
         </button>

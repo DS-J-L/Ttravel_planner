@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import styles from './MapLoading.module.css';
 
 export default function MapLoading() {
   const location = useLocation();
@@ -50,7 +51,7 @@ export default function MapLoading() {
               travelPlan: travelPlan,
             },
           });
-        }, 1000); // Short delay for smooth UX
+        }, 1000);
 
       } catch (err) {
         console.error("Failed to fetch data:", err);
@@ -63,13 +64,13 @@ export default function MapLoading() {
   }, [userInput, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-300 to-white flex flex-col items-center justify-center text-center px-4">
-      <h2 className="text-2xl font-bold mb-2">🗺️ Generating Your Travel Map</h2>
-      <p className="mb-6 text-lg">{status}</p>
+    <div className={styles.container}>
+      <h2 className={styles.title}>🗺️ Generating Your Travel Map</h2>
+      <p className={styles.status}>{status}</p>
 
-      <div className="w-full max-w-md bg-gray-200 rounded-full h-5 overflow-hidden">
+      <div className={styles.progressBarBackground}>
         <div
-          className="bg-green-500 h-full transition-all duration-500"
+          className={styles.progressBarFill}
           style={{ width: `${progress}%` }}
         ></div>
       </div>
