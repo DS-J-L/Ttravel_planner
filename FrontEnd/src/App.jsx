@@ -1,11 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+} from "react-router-dom";
+
 import MainPage from "./pages/MainPage";
 import UserInputPage from "./pages/UserInputPage";
 import MapLoadingPage from "./pages/MapLoadingPage";
 import MapVisualizePage from "./pages/MapVisualizePage";
 import SavePage from "./pages/SavePage";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage"; // 추가
 import { UserProvider, useUser } from "./context/UserContext";
 
 function ProtectedRoute({ element }) {
@@ -17,6 +24,7 @@ function AppRoutes() {
     return (
         <Routes>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} /> {/* 회원가입 */}
             <Route path="/" element={<ProtectedRoute element={<MainPage />} />} />
             <Route path="/input" element={<ProtectedRoute element={<UserInputPage />} />} />
             <Route path="/loading" element={<ProtectedRoute element={<MapLoadingPage />} />} />

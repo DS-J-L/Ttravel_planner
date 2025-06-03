@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import GoogleMapComponent from "../components/GoogleMapComponent";
 
 
@@ -86,12 +87,15 @@ export default function MapVisualize() {
         </div>
 
         <div className="border border-sky-400 rounded-3xl p-4 h-96">
-          <div className="mb-2 font-semibold">지도</div>
+        <div className="mb-2 font-semibold">지도</div>
           {currentPlaces.length > 0 && (
-           <GoogleMapComponent places={currentPlaces} />
-         )}
+            <GoogleMapComponent
+          places={currentPlaces}
+          routeGeoJson={routeGeoJson}
+            />
+          )}
         </div>
-      </div>
+        </div>
 
       <div className="mb-2 font-semibold">수정 사항</div>
       <textarea
