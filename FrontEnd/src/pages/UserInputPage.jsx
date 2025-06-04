@@ -1,53 +1,51 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { UserData } from "../components/user_data";
 import styles from "./InputForm.module.css";
 
 export default function InputForm() {
   const navigate = useNavigate();
   const location = useLocation();
-  const selectedTheme = location.state?.selectedTheme || "";
+  const UserId = location.state?.userId || "";
 
   const [form, setForm] = useState({
-    name: "",
-    region: "",
-    date: "",
-    theme: selectedTheme,
-    people: 1,
-    budget: 0,
     location: "",
     durationStart: "",
     durationEnd: "",
-    companions: "",
+    companions: 1,
     concept: "",
     extra_request: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({
+      ...prev,
+      [name]:
+        name === "companions" ? parseInt(value, 10) || 0 : value,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userData = new UserData();
-    userData.name = form.name;
-    userData.region = form.region;
-    userData.date = form.date;
-    userData.theme = form.theme;
-    userData.people = form.people;
-    userData.budget = form.budget;
-    userData.location = form.location;
-    userData.duration = {
-      start: form.durationStart,
-      end: form.durationEnd,
+    const userRequest = {
+      user_id: UserId,
+      location: form.location,
+      duration: {
+        start: form.durationStart,
+        end: form.durationEnd,
+      },
+      companions: parseInt(form.companions, 10),
+      concept: form.concept,
+      extra_request: form.extra_request,
+      kwargs: {
+        filter: null,
+        prev_map_data: null,
+        cache_key: null,
+      },
     };
-    userData.companions = form.companions;
-    userData.concept = form.concept;
-    userData.extra_request = form.extra_request;
 
-    navigate("/result", { state: { userInput: userData.toJSON() } });
+    navigate("/map_loading", { state: { userRequest } });
   };
 
   return (
@@ -55,44 +53,118 @@ export default function InputForm() {
       <form onSubmit={handleSubmit} className={styles.form}>
         <h2 className={styles.title}>여행 정보 입력</h2>
 
-        {[
-          { label: "이름", name: "name", type: "text" },
-          { label: "지역", name: "region", type: "text" },
-          { label: "날짜", name: "date", type: "date" },
-          { label: "인원수", name: "people", type: "number" },
-          { label: "예산", name: "budget", type: "number" },
-          { label: "테마", name: "theme", type: "text" },
-          { label: "여행 위치", name: "location", type: "text" },
-          { label: "시작일", name: "durationStart", type: "date" },
-          { label: "종료일", name: "durationEnd", type: "date" },
-          { label: "동행자", name: "companions", type: "text" },
-          { label: "여행 컨셉", name: "concept", type: "text" },
-        ].map(({ label, name, type }) => (
-          <div key={name} className={styles.inputGroup}>
-            <label className={styles.label}>{label}</label>
-            <input
-              type={type}
-              name={name}
-              value={form[name]}
-              onChange={handleChange}
-              className={styles.input}
-              required
-            />
-          </div>
-        ))}
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="location">
+            Location:
+          </label>
+          <select
+            name="location"
+            id="location"
+            value={form.location}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          >
+            <option value="">-- Select --</option>
+            <option value="New York">New York</option>
+            <option value="Los Angeles">Los Angeles</option>
+            <option value="Sydney">Sydney</option>
+            <option value="Tokyo">Tokyo</option>
+            <option value="Hongkong">Hongkong</option>
+            <option value="Jeju">Jeju</option>
+          </select>
+        </div>
 
         <div className={styles.inputGroup}>
-          <label className={styles.label}>추가 요청사항</label>
-          <textarea
+          <label className={styles.label} htmlFor="durationStart">
+            Duration Start:
+          </label>
+          <input
+            type="date"
+            id="durationStart"
+            name="durationStart"
+            value={form.durationStart}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          />
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="durationEnd">
+            Duration End:
+          </label>
+          <input
+            type="date"
+            id="durationEnd"
+            name="durationEnd"
+            value={form.durationEnd}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          />
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="companions">
+            Number of Companions:
+          </label>
+          <input
+            type="number"
+            id="companions"
+            name="companions"
+            min="1"
+            max="10"
+            value={form.companions}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          />
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="concept">
+            Trip Concept:
+          </label>
+          <select
+            name="concept"
+            id="concept"
+            value={form.concept}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          >
+            <option value="">-- Select --</option>
+            <option value="peaceful nature areas">🌿 Nature & Relaxation</option>
+            <option value="popular local food spots">🍜 Foodie Adventure</option>
+            <option value="cultural sites and heritage attractions">
+              🏛️ Cultural & Historical
+            </option>
+            <option value="family adventure attractions">
+              🎢 Active & Funion
+            </option>
+            <option value="scenic viewpoints for photography">
+              📸 Scenic & Photogenic
+            </option>
+          </select>
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label className={styles.label} htmlFor="extra_request">
+            Extra Request:
+          </label>
+          <input
+            type="text"
+            id="extra_request"
             name="extra_request"
             value={form.extra_request}
             onChange={handleChange}
-            className={styles.textarea}
+            className={styles.input}
           />
         </div>
 
         <button type="submit" className={styles.submitButton}>
-          다음
+          Submit
         </button>
       </form>
     </div>
