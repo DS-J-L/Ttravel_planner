@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./LoginPage.module.css";
-console.log("뭔데:",styles);
+
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -20,7 +20,8 @@ export default function LoginPage() {
             const result = await response.json();
 
             if (result.success) {
-                navigate("/input", { state: { userId: result.user_id } });
+            setUser({ name: result.user_name });
+            navigate("/");
             } else {
                 setMessage(result.message || "로그인 실패");
             }
