@@ -20,7 +20,7 @@ export default function LoginPage() {
             const result = await response.json();
 
             if (result.success) {
-                navigate("/user_submit", { state: { userId: result.user_id } });
+                navigate("/input", { state: { userId: result.user_id } });
             } else {
                 setMessage(result.message || "로그인 실패");
             }
