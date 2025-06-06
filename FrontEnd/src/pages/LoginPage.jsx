@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 import styles from "./LoginPage.module.css";
 
 export default function LoginPage() {
@@ -7,6 +8,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
+    const { setUser } = useUser();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,8 +22,9 @@ export default function LoginPage() {
             const result = await response.json();
 
             if (result.success) {
-            setUser({ name: result.user_name });
-            navigate("/");
+                const userId = result.user_id;
+                setUser({ id: userId });
+                navigate("/input", { state: { userId } });
             } else {
                 setMessage(result.message || "로그인 실패");
             }

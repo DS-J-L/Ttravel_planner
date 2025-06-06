@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 import styles from "./InputForm.module.css";
 
 export default function InputForm() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const UserId = location.state?.userId || "";
+  const { user } = useUser();
+  const UserId = user?.id || "";
 
   const [form, setForm] = useState({
     location: "",
