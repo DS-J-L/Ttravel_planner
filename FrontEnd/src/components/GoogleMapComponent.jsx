@@ -1,15 +1,25 @@
-// src/components/GoogleMapComponent.jsx
 import { useEffect, useRef } from "react";
 
-export default function GoogleMapComponent({ places }) {
+export default function GoogleMapComponent({ places, routeGeoJson }) {
     const mapRef = useRef(null);
+
+    // GeoJSON → Google Maps LatLng[] 변환 함수
+    const convertGeoJsonToPath = (geojson) => {
+        try {
+            const coords = geojson.features[0].geometry.coordinates;
+            return coords.map(([lng, lat]) => ({ lat, lng }));
+        } catch (err) {
+            console.error("경로 변환 실패", err);
+            return [];
+        }
+    };
 
     useEffect(() => {
         if (!places || places.length === 0) return;
 
         const loadGoogleMaps = () => {
             const script = document.createElement("script");
-            script.src = `https://maps.googleapis.com/maps/api/js?key=${Google_Maps_API_KEY}`;
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
             script.async = true;
             script.defer = true;
             script.onload = drawMap;
@@ -25,6 +35,7 @@ export default function GoogleMapComponent({ places }) {
                 zoom: 13,
             });
 
+            // 마커 생성
             places.forEach((place) => {
                 const marker = new window.google.maps.Marker({
                     position: {
@@ -49,6 +60,19 @@ export default function GoogleMapComponent({ places }) {
                     infoWindow.open(map, marker);
                 });
             });
+
+            // 경로선 표시
+            if (routeGeoJson) {
+                const path = convertGeoJsonToPath(routeGeoJson);
+                new window.google.maps.Polyline({
+                    path,
+                    geodesic: true,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 4,
+                    map: map,
+                });
+            }
         };
 
         if (!window.google || !window.google.maps) {
@@ -56,7 +80,7 @@ export default function GoogleMapComponent({ places }) {
         } else {
             drawMap();
         }
-    }, [places]);
+    }, [places, routeGeoJson]); // routeGeoJson도 의존성에 추가
 
     return (
         <div
