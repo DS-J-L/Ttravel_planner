@@ -24,7 +24,7 @@ export default function LoginPage() {
             if (result.success) {
                 const userId = result.user_id;
                 setUser({ id: userId });
-                navigate("/input", { state: { userId } });
+                navigate("/", { state: { userId } });
             } else {
                 setMessage(result.message || "로그인 실패");
             }
