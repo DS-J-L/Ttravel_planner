@@ -12,14 +12,11 @@ export default function MapVisualize() {
 
     const [selectedDayIndex, setSelectedDayIndex] = useState(0);
     const [routeGeoJson, setRouteGeoJson] = useState(null);
-    const [email, setEmail] = useState("");
+    //이메일은 없고 일정저장 const [email, setEmail] = useState("");
     const [feedback, setFeedback] = useState("");
     const [loadingRoute, setLoadingRoute] = useState(false);
     const [currentPlaces, setCurrentPlaces] = useState([]);
 
-    const handleSendEmail = () => {
-        console.log("Email 보내기 기능은 아직 구현되지 않았습니다.");
-    };
 
     const getLatLngObj = (location) => ({
         lat: location?.latitude ?? 37.5665,
@@ -28,6 +25,26 @@ export default function MapVisualize() {
 
     const getORSCoords = (list) =>
         list.map((v) => [v.location.longitude, v.location.latitude]);
+
+
+    const handleSavePlan = async () => {
+        const poiList = currentPlaces.map((place) => ({
+            name: place.name,
+            latitude: place.location.latitude,
+            longitude: place.location.longitude,
+        }));
+
+        try {
+            await axios.post("http://localhost:8000/api/save_py", {
+                poi_list: poiList,
+                filename: "my_trip.csv",
+            });
+            alert("일정이 저장되었습니다.");
+        } catch (err) {
+            console.error("일정 저장 실패", err);
+            alert("저장 실패: 서버 오류");
+        }
+    };
 
     useEffect(() => {
         if (!travelPlan?.dayplan || travelPlan.dayplan.length === 0) return;
@@ -122,7 +139,7 @@ export default function MapVisualize() {
                 <button className={styles.navButton} onClick={() => navigate("/")}>
                     메인메뉴로 돌아가기
                 </button>
-                <button className={styles.navButton} onClick={handleSendEmail} disabled={!email}>
+                <button className={styles.navButton} onClick={handleSavePlan}>
                     일정 저장하기
                 </button>
             </div>
