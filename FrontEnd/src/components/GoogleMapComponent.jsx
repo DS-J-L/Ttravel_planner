@@ -9,7 +9,7 @@ export default function GoogleMapComponent({ places }) {
 
         const loadGoogleMaps = () => {
             const script = document.createElement("script");
-            script.src = `https://maps.googleapis.com/maps/api/js?key=${AIzaSyDAh8X5z5tkUEqhWHu4TJ3jrSvkF67vDO8}`;
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${Google_Maps_API_KEY}`;
             script.async = true;
             script.defer = true;
             script.onload = drawMap;
