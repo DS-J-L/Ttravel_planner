@@ -46,7 +46,7 @@ export default function InputForm() {
       },
     };
 
-    navigate("/map_loading", { state: { userRequest } });
+    navigate("/loading", { state: { userRequest } });
   };
 
   return (
