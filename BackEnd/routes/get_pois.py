@@ -24,7 +24,7 @@ def get_pois(user_request: UserRequest):
         raise HTTPException(status_code=500, detail=str(e))
     try:
         # Step 2: Fetch POIs based on filter
-        poi_list = extract_pois(user_request, filter_data)
+        poi_list = extract_pois(user_request, filter_data, limit=10)
         print('poi list:\n',poi_list)
     except Exception as e:
         print("poi extraction failed")

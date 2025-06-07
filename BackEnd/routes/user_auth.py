@@ -15,6 +15,7 @@ async def register_user(user: UserAuth):
 
 @router.post("/login")
 async def login(user: UserAuth):
+    print(user)
     found_user = await users_collection.find_one({"email": user.email})
 
     if not found_user or found_user["password"] != user.password:

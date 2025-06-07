@@ -1,9 +1,8 @@
 from components.plan_data import Location, Visiting, DayPlan, TravelPlan
 from components.user_request_data import Duration
-from components.llm_score_data import Place
+from components.llm_score_data import PlaceScore
 from datetime import datetime, timedelta
 from typing import List, Optional
-from config import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
 import requests
 import numpy as np
 # ---- remove after implementing naver api
@@ -129,7 +128,7 @@ def next_visit(scores: List[float], pois: List[Visiting], clusters: List[int],
 
     return selected_poi
 
-def optimize_route(user_id: str, duration: Duration, pois_data: List[Place], visits_per_day: int = 3, score_threshold=7.4) -> TravelPlan:
+def optimize_route(user_id: str, duration: Duration, pois_data: List[PlaceScore], visits_per_day: int = 3, score_threshold=7.4) -> TravelPlan:
     """
     Create an optimized travel plan based on POIs provided as dictionaries
     

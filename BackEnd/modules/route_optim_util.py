@@ -1,6 +1,6 @@
 from modules.common.llm_request import request_to_llm
 from components.user_request_data import UserRequest
-from components.llm_score_data import Place
+from components.llm_score_data import PlaceScore
 from typing import List, Dict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from modules.common.poi_metadata import get_reviews
@@ -8,7 +8,7 @@ from modules.common.cache_util import load_data
 import requests
 import traceback
 
-def get_scores_from_llm(poi_list: List[Dict], user_data: UserRequest) -> List[Place]:
+def get_scores_from_llm(poi_list: List[Dict], user_data: UserRequest) -> List[PlaceScore]:
     def chunk_list(lst, chunk_size):
         """Yield successive chunks from list."""
         for i in range(0, len(lst), chunk_size):
@@ -17,7 +17,7 @@ def get_scores_from_llm(poi_list: List[Dict], user_data: UserRequest) -> List[Pl
     # Parameters
     batch_size = 10  # You can adjust this as needed
     batches = list(chunk_list(poi_list, batch_size))
-    results: List[Place] = []
+    results: List[PlaceScore] = []
 
     with ThreadPoolExecutor() as executor:
         # Submit tasks
@@ -36,8 +36,8 @@ def get_scores_from_llm(poi_list: List[Dict], user_data: UserRequest) -> List[Pl
 
     return results
 
-def get_scores_for_batch(batch: List[Dict], user_data: UserRequest) -> List[Place]:
-    results: List[Place] = []
+def get_scores_for_batch(batch: List[Dict], user_data: UserRequest) -> List[PlaceScore]:
+    results: List[PlaceScore] = []
 
     for place in batch:
         name = place["name"]
@@ -95,13 +95,14 @@ Reviews:
         # Step 5: Calculate average score
         avg_score = sum(scores) / len(scores)
         # Step 6: Create and add Place object
-        results.append(Place(name=name, latitude=latitude, longitude=longitude, score=avg_score, category=category))
+        results.append(PlaceScore(name=name, latitude=latitude, longitude=longitude, score=avg_score, category=category))
     print('batch result:\n', results)
     return results
 
 # ---- Helper to load pois ----
 def load_pois(key):
     data = load_data(key)
+    print(data)
     return data["poi_list"]
 
 def get_nearby_accommodations(lat, lon, radius=2000, limit=10):

@@ -1,6 +1,6 @@
 from typing import TypedDict, List
 
-class Place(TypedDict):
+class PlaceScore(TypedDict):
     name: str
     latitude: float
     longitude: float

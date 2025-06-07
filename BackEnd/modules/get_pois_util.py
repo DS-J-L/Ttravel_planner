@@ -84,5 +84,5 @@ def save_pois(poi_list):
     payload = {
         "poi_list": poi_list
     }
-    key = save_data(payload)
+    key = save_data(payload=payload)
     return key
