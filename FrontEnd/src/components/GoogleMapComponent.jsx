@@ -35,7 +35,6 @@ export default function GoogleMapComponent({ places, routeGeoJson }) {
                 zoom: 13,
             });
 
-            // 마커 생성
             places.forEach((place) => {
                 const marker = new window.google.maps.Marker({
                     position: {
