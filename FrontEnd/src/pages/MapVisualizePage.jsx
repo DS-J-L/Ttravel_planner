@@ -17,7 +17,6 @@ export default function MapVisualize() {
     const [loadingRoute, setLoadingRoute] = useState(false);
     const [currentPlaces, setCurrentPlaces] = useState([]);
 
-
     const getLatLngObj = (location) => ({
         lat: location?.latitude ?? 37.5665,
         lng: location?.longitude ?? 126.9780,
@@ -47,9 +46,9 @@ export default function MapVisualize() {
     };
 
     useEffect(() => {
-        if (!travelPlan?.dayplan || travelPlan.dayplan.length === 0) return;
+        if (!travelPlan?.dayplans || travelPlan.dayplans.length === 0) return;
 
-        const day = travelPlan.dayplan[selectedDayIndex];
+        const day = travelPlan.dayplans[selectedDayIndex];
         const places = day?.place_to_visit || [];
 
         setCurrentPlaces(places);
@@ -84,7 +83,7 @@ export default function MapVisualize() {
     };
 
     // 조건부 렌더링
-    if (!travelPlan?.dayplan || travelPlan.dayplan.length === 0) {
+    if (!travelPlan?.dayplans || travelPlan.dayplans.length === 0) {
         return (
             <div className={styles.errorContainer}>
                 <h2>Error</h2>
@@ -106,7 +105,7 @@ export default function MapVisualize() {
                         value={selectedDayIndex}
                         className={styles.daySelect}
                     >
-                        {travelPlan.dayplan.map((day, i) => (
+                        {travelPlan.dayplans.map((day, i) => (
                             <option key={i} value={i}>
                                 Day {i + 1}: {day.date}
                             </option>
