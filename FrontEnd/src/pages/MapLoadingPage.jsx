@@ -20,7 +20,7 @@ export default function MapLoading() {
 
         console.log(JSON.stringify(userInput));
 
-        const getPoisRes = await fetch("http://localhost:3000/api/get_pois", {
+        const getPoisRes = await fetch("http://localhost:8000/api/get_pois", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userInput),
@@ -32,7 +32,7 @@ export default function MapLoading() {
         setProgress(50);
         setStatus("Optimizing route...");
 
-        const routeOptimRes = await fetch("http://localhost:3000/api/route_optim", {
+        const routeOptimRes = await fetch("http://localhost:8000/api/route_optim", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userRequest),
