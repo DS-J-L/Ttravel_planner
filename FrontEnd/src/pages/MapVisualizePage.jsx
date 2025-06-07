@@ -79,7 +79,16 @@ export default function MapVisualize() {
             ...userData,
             extra_request: feedback,
         };
-        navigate("/map_loading", { state: { userInput: updatedUserData } });
+
+        // ⚠️ 임시 경로로 먼저 이동 (리마운트 유도)
+        navigate("/temp_reload");
+
+        // 아주 짧은 시간 후 다시 map_loading으로 이동
+            setTimeout(() => {
+            navigate("/map_loading", {
+                state: { userRequest: updatedUserData },
+            });
+            }, 10);  // 10~100ms 사이면 충분함
     };
 
     // 조건부 렌더링

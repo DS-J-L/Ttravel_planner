@@ -32,6 +32,7 @@ function AppRoutes() {
             <Route path="/loading" element={<ProtectedRoute element={<MapLoadingPage />} />} />
             <Route path="/map_visualize" element={<ProtectedRoute element={<MapVisualizePage />} />} />
             <Route path="/saved" element={<ProtectedRoute element={<SavePage />} />} />
+            <Route path="/temp_reload" element={<div></div>} />
         </Routes>
     );
 }
