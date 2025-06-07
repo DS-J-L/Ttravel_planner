@@ -46,9 +46,9 @@ export default function MapVisualize() {
     };
 
     useEffect(() => {
-        if (!travelPlan?.dayplans || travelPlan.dayplans.length === 0) return;
+        if (!travelPlan?.plans || travelPlan.plans.length === 0) return;
 
-        const day = travelPlan.dayplans[selectedDayIndex];
+        const day = travelPlan.plans[selectedDayIndex];
         const places = day?.place_to_visit || [];
 
         setCurrentPlaces(places);
@@ -83,7 +83,7 @@ export default function MapVisualize() {
     };
 
     // 조건부 렌더링
-    if (!travelPlan?.dayplans || travelPlan.dayplans.length === 0) {
+    if (!travelPlan?.plans || travelPlan.plans.length === 0) {
         return (
             <div className={styles.errorContainer}>
                 <h2>Error</h2>
@@ -105,7 +105,7 @@ export default function MapVisualize() {
                         value={selectedDayIndex}
                         className={styles.daySelect}
                     >
-                        {travelPlan.dayplans.map((day, i) => (
+                        {travelPlan.plans.map((day, i) => (
                             <option key={i} value={i}>
                                 Day {i + 1}: {day.date}
                             </option>
