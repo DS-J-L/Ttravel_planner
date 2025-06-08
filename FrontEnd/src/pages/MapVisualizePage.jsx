@@ -8,7 +8,7 @@ export default function MapVisualize() {
     const { state } = useLocation();
     const navigate = useNavigate();
     const travelPlan = state?.travelPlan;
-    const userData = state?.userData;
+    const userData = state?.userRequest;
 
     const [selectedDayIndex, setSelectedDayIndex] = useState(0);
     const [routeGeoJson, setRouteGeoJson] = useState(null);
