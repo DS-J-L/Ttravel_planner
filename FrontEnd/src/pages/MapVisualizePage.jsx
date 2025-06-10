@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import GoogleMapComponent from "../components/GoogleMapComponent";
+import ScheduleViewer from "../components/ScheduleViewer";
 import styles from "./MapVisualize.module.css";
 
 export default function MapVisualize() {
@@ -12,10 +13,10 @@ export default function MapVisualize() {
 
     const [selectedDayIndex, setSelectedDayIndex] = useState(0);
     const [routeGeoJson, setRouteGeoJson] = useState(null);
-    //이메일은 없고 일정저장 const [email, setEmail] = useState("");
     const [feedback, setFeedback] = useState("");
     const [loadingRoute, setLoadingRoute] = useState(false);
     const [currentPlaces, setCurrentPlaces] = useState([]);
+    const [segmentRoutes, setSegmentRoutes] = useState([]);
 
     const getLatLngObj = (location) => ({
         lat: location?.latitude ?? 37.5665,
@@ -63,6 +64,15 @@ export default function MapVisualize() {
                     coordinates: getORSCoords(places),
                 });
                 setRouteGeoJson(res.data);
+
+                const segments = res.data.features?.[0]?.properties?.segments;
+                if (segments) {
+                    setSegmentRoutes(segments);
+                    console.log("✅ segmentRoutes 저장됨:", segments); // 디버깅 로그
+                } else {
+                    setSegmentRoutes([]);
+                    console.warn("⚠️ segment 정보가 없습니다.");
+                }
             } catch (err) {
                 console.error("Route fetch failed", err);
                 setRouteGeoJson(null);
@@ -80,15 +90,10 @@ export default function MapVisualize() {
             extra_request: feedback,
         };
 
-        // ⚠️ 임시 경로로 먼저 이동 (리마운트 유도)
-        navigate("/temp_reload");
-
-        // 아주 짧은 시간 후 다시 map_loading으로 이동
-            setTimeout(() => {
             navigate("/map_loading", {
+                replace: true,
                 state: { userRequest: updatedUserData },
             });
-            }, 10);  // 10~100ms 사이면 충분함
     };
 
     // 조건부 렌더링
@@ -107,6 +112,7 @@ export default function MapVisualize() {
             <div className={styles.title}>저기어때 – AI 여행 가이드</div>
 
             <div className={styles.gridContainer}>
+                {/* 왼쪽 박스: 일정 드롭다운 + 일정 리스트 */}
                 <div className={styles.scheduleBox}>
                     <div className={styles.sectionTitle}>일정</div>
                     <select
@@ -121,6 +127,11 @@ export default function MapVisualize() {
                         ))}
                     </select>
                     {loadingRoute && <p>Loading route...</p>}
+
+                     <ScheduleViewer 
+                        places={currentPlaces} 
+                        segments={segmentRoutes} 
+                     />
                 </div>
 
                 <div className={styles.mapBox}>
